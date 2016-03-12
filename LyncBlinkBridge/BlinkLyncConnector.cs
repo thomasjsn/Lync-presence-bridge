@@ -28,7 +28,20 @@ namespace LyncBlinkBridge
         public BlinkLyncConnectorAppContext()
         {
             Application.ApplicationExit += new System.EventHandler(this.OnApplicationExit);
-            blink1.Open();
+
+            try
+            { 
+                blink1.Open();
+            }
+            catch (InvalidOperationException iox)
+            {
+                Console.Write(iox.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.ToString());
+            }
+
             InitializeComponent();
             trayIcon.Visible = true;
 
@@ -125,9 +138,12 @@ namespace LyncBlinkBridge
             }
         }
 
+        /// <summary>
+        /// Read the current Availability Information from Lync/Skype for Business and set the color 
+        /// </summary>
         void SetCurrentContactState()
         {
-            Rgb newColor = new Rgb(0,0,0);
+            Rgb newColor = colorOff;
             if (lyncClient.State == ClientState.SignedIn)
             {
                 ContactAvailability currentAvailability = (ContactAvailability)lyncClient.Self.Contact.GetContactInformation(ContactInformationType.Availability);
@@ -142,6 +158,9 @@ namespace LyncBlinkBridge
                     case ContactAvailability.Away:
                         newColor = colorAway;
                         break;
+                    case ContactAvailability.DoNotDisturb:
+                        newColor = colorBusy;
+                        break;
                     default:
                         break;
                 }
@@ -152,7 +171,8 @@ namespace LyncBlinkBridge
 
         void SetBlink1State(Rgb color)
         {
-            blink1.SetColor(color);
+            if ( blink1.IsConnected )
+                blink1.SetColor(color);
         }
 
         void lyncClient_StateChanged(object sender, ClientStateChangedEventArgs e)
@@ -195,7 +215,10 @@ namespace LyncBlinkBridge
         {
             //Cleanup so that the icon will be removed when the application is closed
             trayIcon.Visible = false;
-            blink1.Close();
+
+            // Close blink Connection and switch off LED
+            if (blink1.IsConnected)
+                blink1.Close();
         }
         
         private void TrayIcon_DoubleClick(object sender, EventArgs e)
