@@ -6,6 +6,9 @@ using Microsoft.Lync.Model;
 
 using ThingM.Blink1;
 using ThingM.Blink1.ColorProcessor;
+using System.Management;
+using System.Diagnostics;
+using System.Threading;
 
 namespace LyncBlinkBridge
 {
@@ -16,6 +19,8 @@ namespace LyncBlinkBridge
 
         private LyncClient lyncClient;
         private Blink1 blink1 = new Blink1();
+
+        private ManagementEventWatcher usbWatcher;
 
         private bool isLyncIntegratedMode = true;
 
@@ -29,28 +34,39 @@ namespace LyncBlinkBridge
         {
             Application.ApplicationExit += new System.EventHandler(this.OnApplicationExit);
 
+            // Setup UI, NotifyIcon
+            InitializeComponent();
+
+            trayIcon.Visible = true;
+
+            // Setup Blink
+            InitializeBlink1();
+
+            // Setup Lync Client Connection
+            GetLyncClient();
+
+            // Watch for USB Changes, try to monitor blink plugin/removal
+            InitializeUSBWatcher();
+
+        }
+
+        private bool InitializeBlink1()
+        {
             try
-            { 
+            {
                 blink1.Open();
             }
             catch (InvalidOperationException iox)
             {
                 // No blink devices attached, switching to loacl mode (in the future) 
-                Console.Write(iox.ToString());
+                Debug.WriteLine(iox.ToString());
             }
             catch (Exception e)
             {
-                Console.Write(e.ToString());
+                Debug.WriteLine(e.ToString());
             }
 
-            InitializeComponent();
-
-            trayIcon.Visible = true;
-
-            //
-            // Lync Client Connection
-            //
-            GetLyncClient();
+            return blink1.IsConnected;
 
         }
 
@@ -106,11 +122,16 @@ namespace LyncBlinkBridge
             }
             catch (ClientNotFoundException)
             {
+                Debug.WriteLine("Lync Client not started.");
+
                 SetLyncIntegrationMode(false);
+
                 trayIcon.ShowBalloonTip(1000, "Error", "Lync Client not started. Running in manual mode now. Please use the context menu to change your blink color", ToolTipIcon.Warning);
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e.ToString());
+
                 trayIcon.ShowBalloonTip(1000, "Error", "Something went wrong by getting your Lync status. Running in manual mode now. Please use the context menu to change your blink color", ToolTipIcon.Warning);
             }
         }
@@ -159,8 +180,17 @@ namespace LyncBlinkBridge
 
         void SetBlink1State(Rgb color)
         {
-            if ( blink1.IsConnected )
-                blink1.SetColor(color);
+            bool setColorResult = false;
+
+            if (blink1.IsConnected)
+            {
+                setColorResult = blink1.SetColor(color);
+                if (setColorResult)
+                    Debug.WriteLine("Successful set blink1 to {0},{1},{2}", color.Red, color.Green, color.Blue);
+                else
+                    Debug.WriteLine("Error setting blink1 to {0},{1},{2}", color.Red, color.Green, color.Blue);
+
+            }
         }
 
         void lyncClient_StateChanged(object sender, ClientStateChangedEventArgs e)
@@ -204,6 +234,10 @@ namespace LyncBlinkBridge
             //Cleanup so that the icon will be removed when the application is closed
             trayIcon.Visible = false;
 
+            // stop (USB) ManagementEventWatcher
+            usbWatcher.Stop();
+            usbWatcher.Dispose();
+
             // Close blink Connection and switch off LED
             if (blink1.IsConnected)
                 blink1.Close();
@@ -242,6 +276,36 @@ namespace LyncBlinkBridge
         private void AvailableMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorAvailable);
+        }
+
+        // Watch for USB changes to detect blink(1) removal
+        private void InitializeUSBWatcher()
+        {
+            usbWatcher = new ManagementEventWatcher();
+            var query = new WqlEventQuery("SELECT * FROM Win32_DeviceChangeEvent");
+            usbWatcher.EventArrived += new EventArrivedEventHandler(watcher_EventArrived);
+            usbWatcher.Query = query;
+            usbWatcher.Start();
+        }
+
+        private void watcher_EventArrived(object sender, EventArrivedEventArgs e)
+        {
+            // Check if blink was removed
+            // do not know what we do then, some hint to user?
+            InitializeBlink1();
+
+            if (blink1.IsConnected)
+            {
+                Debug.WriteLineIf(blink1.IsConnected, "USB change, Blink(1) available");
+
+                // timing problem in blink(1) if we set the state to fast after plugin change, wait 100ms
+                Thread.Sleep(100);
+                SetCurrentContactState();
+            }
+            else
+            {
+                Debug.WriteLineIf(!blink1.IsConnected, "USB change, Blink(1) not available");
+            }
         }
     }
 }
