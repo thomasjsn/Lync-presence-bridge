@@ -13,10 +13,10 @@ namespace LyncBlinkBridge
     {
         private NotifyIcon trayIcon;
         private ContextMenuStrip trayIconContextMenu;
-        private ToolStripMenuItem closeMenuItem;
-        private ToolStripMenuItem aboutMenuItem;
+
         private LyncClient lyncClient;
         private Blink1 blink1 = new Blink1();
+
         private bool isLyncIntegratedMode = true;
 
         private Rgb colorAvailable = new Rgb(0, 150, 17);
@@ -35,6 +35,7 @@ namespace LyncBlinkBridge
             }
             catch (InvalidOperationException iox)
             {
+                // No blink devices attached, switching to loacl mode (in the future) 
                 Console.Write(iox.ToString());
             }
             catch (Exception e)
@@ -43,6 +44,7 @@ namespace LyncBlinkBridge
             }
 
             InitializeComponent();
+
             trayIcon.Visible = true;
 
             //
@@ -57,19 +59,14 @@ namespace LyncBlinkBridge
             trayIcon = new NotifyIcon();
 
             //The icon is added to the project resources.
-            //Here I assume that the name of the file is 'TrayIcon.ico'
             trayIcon.Icon = Properties.Resources.TrayIcon;
 
-            //handle doubleclicks on the icon:
-            trayIcon.DoubleClick += TrayIcon_DoubleClick;
-
-            // 
             // TrayIconContextMenu
-            // 
             trayIconContextMenu = new ContextMenuStrip();
             trayIconContextMenu.SuspendLayout();
             trayIconContextMenu.Name = "TrayIconContextMenu";
 
+            // Tray Context Menuitems to set color
             this.trayIconContextMenu.Items.Add("Available", null, new EventHandler(AvailableMenuItem_Click));
             this.trayIconContextMenu.Items.Add("Busy", null, new EventHandler(BusyMenuItem_Click));
             this.trayIconContextMenu.Items.Add("Away", null, new EventHandler(AwayMenuItem_Click));
@@ -79,24 +76,14 @@ namespace LyncBlinkBridge
             this.trayIconContextMenu.Items.Add(new ToolStripSeparator());
 
             // About Form Line
-            aboutMenuItem = new ToolStripMenuItem();
-            this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Text = "About";
-            this.aboutMenuItem.Click += new EventHandler(this.aboutMenuItem_Click);
-            this.trayIconContextMenu.Items.Add(aboutMenuItem);
+            this.trayIconContextMenu.Items.Add("About", null, new EventHandler(aboutMenuItem_Click));
 
             // Separation Line
             this.trayIconContextMenu.Items.Add(new ToolStripSeparator());
 
-            // 
             // CloseMenuItem
-            // 
-            closeMenuItem = new ToolStripMenuItem();
-            this.closeMenuItem.Name = "CloseMenuItem";
-            //this.closeMenuItem.Size = new Size(152, 22);
-            this.closeMenuItem.Text = "Exit";
-            this.closeMenuItem.Click += new EventHandler(this.CloseMenuItem_Click);
-            this.trayIconContextMenu.Items.Add(closeMenuItem);
+            this.trayIconContextMenu.Items.Add("Exit", null, new EventHandler(CloseMenuItem_Click));
+
 
             trayIconContextMenu.ResumeLayout(false);
             trayIcon.ContextMenuStrip = trayIconContextMenu;
@@ -108,6 +95,7 @@ namespace LyncBlinkBridge
         {
             try
             {
+                // try to get the running lync client and register for change events, if Client is not running then ClientNoFound Exception is thrown by lync api
                 lyncClient = LyncClient.GetClient();
                 lyncClient.StateChanged += lyncClient_StateChanged;
                 
