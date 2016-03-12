@@ -43,18 +43,11 @@ namespace LyncBlinkBridge
         {
             trayIcon = new NotifyIcon();
 
-            trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-            trayIcon.BalloonTipText =
-              "I noticed that you double-clicked me! What can I do for you?";
-            trayIcon.BalloonTipTitle = "I've not much to say!";
-            trayIcon.Text = "Lync Status:";
-
-
             //The icon is added to the project resources.
             //Here I assume that the name of the file is 'TrayIcon.ico'
             trayIcon.Icon = Properties.Resources.TrayIcon;
 
-            //Optional - handle doubleclicks on the icon:
+            //handle doubleclicks on the icon:
             trayIcon.DoubleClick += TrayIcon_DoubleClick;
 
             // 
@@ -207,8 +200,6 @@ namespace LyncBlinkBridge
         
         private void TrayIcon_DoubleClick(object sender, EventArgs e)
         {
-            //Here you can do stuff if the tray icon is doubleclicked
-            trayIcon.ShowBalloonTip(10000);
         }
 
         private void CloseMenuItem_Click(object sender, EventArgs e)
