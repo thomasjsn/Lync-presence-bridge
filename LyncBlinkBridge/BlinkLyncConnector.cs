@@ -9,6 +9,7 @@ using ThingM.Blink1.ColorProcessor;
 using System.Management;
 using System.Diagnostics;
 using System.Threading;
+using System.Drawing;
 
 namespace LyncBlinkBridge
 {
@@ -75,7 +76,7 @@ namespace LyncBlinkBridge
             trayIcon = new NotifyIcon();
 
             //The icon is added to the project resources.
-            trayIcon.Icon = Properties.Resources.TrayIcon;
+            trayIcon.Icon = Properties.Resources.blink_off;
 
             // TrayIconContextMenu
             trayIconContextMenu = new ContextMenuStrip();
@@ -107,7 +108,7 @@ namespace LyncBlinkBridge
 
         }
 
-        void GetLyncClient()
+        private void GetLyncClient()
         {
             try
             {
@@ -162,6 +163,7 @@ namespace LyncBlinkBridge
                         newColor = colorBusy;
                         break;
                     case ContactAvailability.Free:
+                    case ContactAvailability.FreeIdle:
                         newColor = colorAvailable;
                         break;
                     case ContactAvailability.Away:
@@ -169,6 +171,9 @@ namespace LyncBlinkBridge
                         break;
                     case ContactAvailability.DoNotDisturb:
                         newColor = colorBusy;
+                        break;
+                    case ContactAvailability.Offline:
+                        newColor = colorOff;
                         break;
                     default:
                         break;
@@ -186,10 +191,38 @@ namespace LyncBlinkBridge
             {
                 setColorResult = blink1.SetColor(color);
                 if (setColorResult)
+                {
                     Debug.WriteLine("Successful set blink1 to {0},{1},{2}", color.Red, color.Green, color.Blue);
+                }
                 else
+                {
                     Debug.WriteLine("Error setting blink1 to {0},{1},{2}", color.Red, color.Green, color.Blue);
+                }
+            }
 
+            SetIconState(color);
+
+        }
+
+        void SetIconState(Rgb color)
+        {
+                
+            using (Bitmap b = Bitmap.FromHicon(new Icon( Properties.Resources.blink_off , 48, 48).Handle))
+            {
+                if (color.Blue == 0 && color.Green == 0 && color.Red == 0)
+                {
+                    // wenn schwarz, dann modifizieren wir nicht das Bild. Eventuell müssen wir hier ein nicht verfügbar bild bauen.
+                }
+                else
+                {
+                    Graphics g = Graphics.FromImage(b);
+                    g.FillRegion(new SolidBrush(Color.FromArgb(color.Red, color.Green, color.Blue)), new Region(new Rectangle(20, 29, 22, 27)));
+
+                }
+
+                IntPtr Hicon = b.GetHicon();
+                Icon newIcon = Icon.FromHandle(Hicon);
+                trayIcon.Icon = newIcon;
             }
         }
 
