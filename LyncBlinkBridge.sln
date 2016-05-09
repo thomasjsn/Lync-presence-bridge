@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24627.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBlinkBridge", "LyncBlinkBridge\LyncBlinkBridge.csproj", "{C7F58B3A-D077-4BBB-99F2-B023C7C843B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoSerialRGB", "ArduinoSerial\ArduinoSerialRGB.csproj", "{10691731-8A35-4F2A-9A8B-B60D2C626015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C7F58B3A-D077-4BBB-99F2-B023C7C843B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7F58B3A-D077-4BBB-99F2-B023C7C843B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7F58B3A-D077-4BBB-99F2-B023C7C843B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10691731-8A35-4F2A-9A8B-B60D2C626015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10691731-8A35-4F2A-9A8B-B60D2C626015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10691731-8A35-4F2A-9A8B-B60D2C626015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10691731-8A35-4F2A-9A8B-B60D2C626015}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

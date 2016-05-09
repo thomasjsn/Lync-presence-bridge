@@ -10,6 +10,7 @@ using System.Management;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using ArduinoSerialLeds;
 
 namespace LyncBlinkBridge
 {
@@ -21,6 +22,8 @@ namespace LyncBlinkBridge
         private LyncClient lyncClient;
         private Blink1 blink1 = new Blink1();
 
+        private Serial serial = new Serial();
+
         private ManagementEventWatcher usbWatcher;
 
         private bool isLyncIntegratedMode = true;
@@ -29,6 +32,11 @@ namespace LyncBlinkBridge
         private Rgb colorBusy = new Rgb(150, 0, 0);
         private Rgb colorAway = new Rgb(150, 150, 0);
         private Rgb colorOff = new Rgb(0, 0, 0);
+
+        private byte[] serialAvailable = { 255, 0, 0 };
+        private byte[] serialBusy = { 0, 0, 255 };
+        private byte[] serialAway = { 0, 255, 0 };
+        private byte[] serialOff = { 0, 0, 0 };
 
 
         public BlinkLyncConnectorAppContext()
@@ -42,6 +50,9 @@ namespace LyncBlinkBridge
 
             // Setup Blink
             InitializeBlink1();
+
+            // Setup port
+            serial.Init("COM3");
 
             // Setup Lync Client Connection
             GetLyncClient();
@@ -154,6 +165,8 @@ namespace LyncBlinkBridge
         void SetCurrentContactState()
         {
             Rgb newColor = colorOff;
+            byte[] serialColor = serialOff;
+
             if (lyncClient.State == ClientState.SignedIn)
             {
                 ContactAvailability currentAvailability = (ContactAvailability)lyncClient.Self.Contact.GetContactInformation(ContactInformationType.Availability);
@@ -161,25 +174,31 @@ namespace LyncBlinkBridge
                 {
                     case ContactAvailability.Busy:
                         newColor = colorBusy;
+                        serialColor = serialBusy;
                         break;
                     case ContactAvailability.Free:
                     case ContactAvailability.FreeIdle:
                         newColor = colorAvailable;
+                        serialColor = serialAvailable;
                         break;
                     case ContactAvailability.Away:
                         newColor = colorAway;
+                        serialColor = serialAway;
                         break;
                     case ContactAvailability.DoNotDisturb:
                         newColor = colorBusy;
+                        serialColor = serialBusy;
                         break;
                     case ContactAvailability.Offline:
                         newColor = colorOff;
+                        serialColor = serialOff;
                         break;
                     default:
                         break;
                 }
 
                 SetBlink1State(newColor);
+                serial.SetLEDs(serialColor);
             }
         }
 
@@ -274,6 +293,13 @@ namespace LyncBlinkBridge
             // Close blink Connection and switch off LED
             if (blink1.IsConnected)
                 blink1.Close();
+
+            if (serial.Port.IsOpen)
+            {
+                serial.SetLEDs(serialOff);
+                serial.Dispose();
+            }
+                
         }
         
         private void TrayIcon_DoubleClick(object sender, EventArgs e)
@@ -294,21 +320,25 @@ namespace LyncBlinkBridge
         private void OffMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorOff);
+            serial.SetLEDs(serialOff);
         }
 
         private void AwayMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorAway);
+            serial.SetLEDs(serialAway);
         }
 
         private void BusyMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorBusy);
+            serial.SetLEDs(serialBusy);
         }
 
         private void AvailableMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorAvailable);
+            serial.SetLEDs(serialAvailable);
         }
 
         // Watch for USB changes to detect blink(1) removal

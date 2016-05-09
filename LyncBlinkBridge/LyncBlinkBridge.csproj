@@ -48,8 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HidLibrary">
-      <HintPath>..\StableBin\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.2.36.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.2.36.0\lib\HidLibrary.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Lync.Model, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -88,6 +89,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -118,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\blink_off.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArduinoSerial\ArduinoSerialRGB.csproj">
+      <Project>{10691731-8a35-4f2a-9a8b-b60d2c626015}</Project>
+      <Name>ArduinoSerialRGB</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
