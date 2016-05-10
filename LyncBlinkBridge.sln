@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncBlinkBridge", "LyncBlinkBridge\LyncBlinkBridge.csproj", "{C7F58B3A-D077-4BBB-99F2-B023C7C843B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoSerialRGB", "ArduinoSerial\ArduinoSerialRGB.csproj", "{10691731-8A35-4F2A-9A8B-B60D2C626015}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoSerialLeds", "ArduinoSerial\ArduinoSerialLeds.csproj", "{10691731-8A35-4F2A-9A8B-B60D2C626015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

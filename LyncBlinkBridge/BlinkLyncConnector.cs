@@ -52,7 +52,7 @@ namespace LyncBlinkBridge
             InitializeBlink1();
 
             // Setup port
-            serial.Init("COM3");
+            serial.Init("COM4");
 
             // Setup Lync Client Connection
             GetLyncClient();

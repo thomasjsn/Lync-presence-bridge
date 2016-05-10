@@ -52,9 +52,9 @@ namespace ArduinoSerialLeds
             {
                 //if (!Port.IsOpen) throw new Exception("Serial port not open.");
 
-                string response = string.Empty;
+                //string response = string.Empty;
 
-                serialPort.WriteLine(string.Join(",", colors) + "\n");
+                serialPort.WriteLine(string.Join(",", colors));
 
                 //response = serialPort.ReadLine();
 

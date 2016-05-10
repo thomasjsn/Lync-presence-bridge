@@ -122,9 +122,9 @@
     <None Include="Resources\blink_off.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArduinoSerial\ArduinoSerialRGB.csproj">
+    <ProjectReference Include="..\ArduinoSerial\ArduinoSerialLeds.csproj">
       <Project>{10691731-8a35-4f2a-9a8b-b60d2c626015}</Project>
-      <Name>ArduinoSerialRGB</Name>
+      <Name>ArduinoSerialLeds</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
