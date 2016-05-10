@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ArduinoSerial")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Arduino Serial LEDs")]
+[assembly: AssemblyDescription("Driver for Arduino board with LEDs.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ArduinoSerial")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("uCtrl Development")]
+[assembly: AssemblyProduct("ArduinoSerialLeds")]
+[assembly: AssemblyCopyright("MIT Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("LyncBlinkBridge")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Lync Blink Bridge")]
+[assembly: AssemblyDescription("Set blink(1) and Arduino light based on Skype for Business or Lync presence state.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("uCtrl Development")]
 [assembly: AssemblyProduct("LyncBlinkBridge")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("MIT Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

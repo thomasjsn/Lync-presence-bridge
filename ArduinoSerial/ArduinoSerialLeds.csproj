@@ -7,8 +7,8 @@
     <ProjectGuid>{10691731-8A35-4F2A-9A8B-B60D2C626015}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArduinoSerial</RootNamespace>
-    <AssemblyName>ArduinoSerial</AssemblyName>
+    <RootNamespace>ArduinoSerialLeds</RootNamespace>
+    <AssemblyName>ArduinoSerialLeds</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

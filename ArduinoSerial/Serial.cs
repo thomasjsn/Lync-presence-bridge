@@ -29,6 +29,7 @@ namespace ArduinoSerialLeds
                 serialPort.NewLine = "\n";
                 serialPort.Open();
             }
+
             catch (IOException e)
             {
                 throw e;
@@ -60,6 +61,7 @@ namespace ArduinoSerialLeds
 
                 //Debug.WriteLine("{0} --> {1}", string.Join(",", rgb), response);
             }
+
             catch (Exception e)
             {
                 throw e;

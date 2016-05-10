@@ -176,23 +176,28 @@ namespace LyncBlinkBridge
                         newColor = colorBusy;
                         serialColor = serialBusy;
                         break;
+
                     case ContactAvailability.Free:
                     case ContactAvailability.FreeIdle:
                         newColor = colorAvailable;
                         serialColor = serialAvailable;
                         break;
+
                     case ContactAvailability.Away:
                         newColor = colorAway;
                         serialColor = serialAway;
                         break;
+
                     case ContactAvailability.DoNotDisturb:
                         newColor = colorBusy;
                         serialColor = serialBusy;
                         break;
+
                     case ContactAvailability.Offline:
                         newColor = colorOff;
                         serialColor = serialOff;
                         break;
+
                     default:
                         break;
                 }
@@ -251,23 +256,31 @@ namespace LyncBlinkBridge
             {
                 case ClientState.Initializing:
                     break;
+
                 case ClientState.Invalid:
                     break;
+
                 case ClientState.ShuttingDown:
                     break;
+
                 case ClientState.SignedIn:
                     lyncClient.Self.Contact.ContactInformationChanged += Contact_ContactInformationChanged;
                     SetCurrentContactState();
                     break;
+
                 case ClientState.SignedOut:
                     trayIcon.ShowBalloonTip(1000, "", "You signed out in Lync. Switching to manual mode.", ToolTipIcon.Info);
                     break;
+
                 case ClientState.SigningIn:
                     break;
+
                 case ClientState.SigningOut:
                     break;
+
                 case ClientState.Uninitialized:
                     break;
+
                 default:
                     break;
             }
@@ -292,7 +305,9 @@ namespace LyncBlinkBridge
 
             // Close blink Connection and switch off LED
             if (blink1.IsConnected)
+            {
                 blink1.Close();
+            }
 
             if (serial.Port.IsOpen)
             {
