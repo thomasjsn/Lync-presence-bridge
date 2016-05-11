@@ -59,6 +59,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\StableBin\Microsoft.Lync.Model.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Uc">
+      <HintPath>..\StableBin\Microsoft.Office.Uc.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />

@@ -142,13 +142,14 @@ namespace LyncBlinkBridge
 
                 SetLyncIntegrationMode(false);
 
-                trayIcon.ShowBalloonTip(1000, "Error", "Lync Client not started. Running in manual mode now. Please use the context menu to change your blink color", ToolTipIcon.Warning);
+                trayIcon.ShowBalloonTip(1000, "Error", "Lync Client not started. Running in manual mode now. Please use the context menu to change your blink color.", ToolTipIcon.Warning);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
 
-                trayIcon.ShowBalloonTip(1000, "Error", "Something went wrong by getting your Lync status. Running in manual mode now. Please use the context menu to change your blink color", ToolTipIcon.Warning);
+                trayIcon.ShowBalloonTip(1000, "Error", "Something went wrong by getting your Lync status. Running in manual mode now. Please use the context menu to change your blink color.", ToolTipIcon.Warning);
+                Debug.WriteLine(e.Message);
             }
         }
 
