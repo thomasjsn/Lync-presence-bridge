@@ -7,18 +7,18 @@ using System.IO;
 using System.IO.Ports;
 using System.Diagnostics;
 
-namespace ArduinoSerialLeds
+namespace Uctrl.Arduino
 {
-    public class Serial : IDisposable
+    public class Arduino : IDisposable
     {
-        SerialPort serialPort;
+        private SerialPort serialPort;
 
-        public Serial()
+        public Arduino()
         {
             serialPort = new SerialPort();
         }
 
-        public void Init(string port)
+        public bool OpenPort(string port)
         {
             try
             {
@@ -28,11 +28,13 @@ namespace ArduinoSerialLeds
                 serialPort.WriteTimeout = 1000;
                 serialPort.NewLine = "\n";
                 serialPort.Open();
+
+                return serialPort.IsOpen;
             }
 
-            catch (IOException e)
+            catch (IOException)
             {
-                throw e;
+                return false;
             }
         }
 
@@ -47,26 +49,32 @@ namespace ArduinoSerialLeds
             serialPort.Dispose();
         }
 
-        public void SetLEDs(byte[] colors)
+        public bool Send(string command)
         {
+            if (!Port.IsOpen) return false;
+
             try
             {
-                //if (!Port.IsOpen) throw new Exception("Serial port not open.");
-
                 //string response = string.Empty;
 
-                serialPort.WriteLine(string.Join(",", colors));
+                serialPort.WriteLine(command);
 
                 //response = serialPort.ReadLine();
 
                 //Debug.WriteLine("{0} --> {1}", string.Join(",", rgb), response);
+
+                return true;
             }
 
-            catch (Exception e)
+            catch (IOException)
             {
-                throw e;
+                return false;
             }
+        }
 
+        public bool SetLEDs(byte[] colors)
+        {
+            return Send(string.Join(",", colors));
         }
     }
 }

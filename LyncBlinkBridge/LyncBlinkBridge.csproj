@@ -61,10 +61,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="ThingM.Blink1">
       <HintPath>..\StableBin\ThingM.Blink1.dll</HintPath>
     </Reference>
@@ -79,6 +81,12 @@
     <Compile Include="BlinkLyncConnector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +100,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -104,7 +115,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon1.ico" />
@@ -125,9 +138,9 @@
     <None Include="Resources\blink_off.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArduinoSerial\ArduinoSerialLeds.csproj">
+    <ProjectReference Include="..\Arduino\Uctrl.Arduino.csproj">
       <Project>{10691731-8a35-4f2a-9a8b-b60d2c626015}</Project>
-      <Name>ArduinoSerialLeds</Name>
+      <Name>Uctrl.Arduino</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

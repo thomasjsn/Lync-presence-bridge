@@ -10,7 +10,7 @@ using System.Management;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
-using ArduinoSerialLeds;
+using Uctrl.Arduino;
 
 namespace LyncBlinkBridge
 {
@@ -22,7 +22,7 @@ namespace LyncBlinkBridge
         private LyncClient lyncClient;
         private Blink1 blink1 = new Blink1();
 
-        private Serial serial = new Serial();
+        private Arduino arduino = new Arduino();
 
         private ManagementEventWatcher usbWatcher;
 
@@ -33,10 +33,10 @@ namespace LyncBlinkBridge
         private Rgb colorAway = new Rgb(150, 150, 0);
         private Rgb colorOff = new Rgb(0, 0, 0);
 
-        private byte[] serialAvailable = { 255, 0, 0 };
-        private byte[] serialBusy = { 0, 0, 255 };
-        private byte[] serialAway = { 0, 255, 0 };
-        private byte[] serialOff = { 0, 0, 0 };
+        private byte[] ledsAvailableArduino = { 255, 0, 0 };
+        private byte[] ledsBusyArduino = { 0, 0, 255 };
+        private byte[] ledsAwayArduino = { 0, 255, 0 };
+        private byte[] ledsOffArduino = { 0, 0, 0 };
 
 
         public BlinkLyncConnectorAppContext()
@@ -52,7 +52,10 @@ namespace LyncBlinkBridge
             InitializeBlink1();
 
             // Setup port
-            serial.Init("COM4");
+            if (! arduino.OpenPort("COM" + Properties.Settings.Default.ArduinoSerialPort.ToString()))
+            {
+                trayIcon.ShowBalloonTip(1000, "Error", "Could not open and init serial port.", ToolTipIcon.Warning);
+            }
 
             // Setup Lync Client Connection
             GetLyncClient();
@@ -106,6 +109,9 @@ namespace LyncBlinkBridge
             // About Form Line
             this.trayIconContextMenu.Items.Add("About", null, new EventHandler(aboutMenuItem_Click));
 
+            // Settings Form Line
+            this.trayIconContextMenu.Items.Add("Settings", null, new EventHandler(settingsMenuItem_Click));
+
             // Separation Line
             this.trayIconContextMenu.Items.Add(new ToolStripSeparator());
 
@@ -115,8 +121,6 @@ namespace LyncBlinkBridge
 
             trayIconContextMenu.ResumeLayout(false);
             trayIcon.ContextMenuStrip = trayIconContextMenu;
-
-
         }
 
         private void GetLyncClient()
@@ -164,8 +168,8 @@ namespace LyncBlinkBridge
         /// </summary>
         void SetCurrentContactState()
         {
-            Rgb newColor = colorOff;
-            byte[] serialColor = serialOff;
+            Rgb blinkColor = colorOff;
+            byte[] arduinoLeds = ledsOffArduino;
 
             if (lyncClient.State == ClientState.SignedIn)
             {
@@ -173,37 +177,38 @@ namespace LyncBlinkBridge
                 switch (currentAvailability)
                 {
                     case ContactAvailability.Busy:
-                        newColor = colorBusy;
-                        serialColor = serialBusy;
+                    case ContactAvailability.BusyIdle:
+                        blinkColor = colorBusy;
+                        arduinoLeds = ledsBusyArduino;
                         break;
 
                     case ContactAvailability.Free:
                     case ContactAvailability.FreeIdle:
-                        newColor = colorAvailable;
-                        serialColor = serialAvailable;
+                        blinkColor = colorAvailable;
+                        arduinoLeds = ledsAvailableArduino;
                         break;
 
                     case ContactAvailability.Away:
-                        newColor = colorAway;
-                        serialColor = serialAway;
+                        blinkColor = colorAway;
+                        arduinoLeds = ledsAwayArduino;
                         break;
 
                     case ContactAvailability.DoNotDisturb:
-                        newColor = colorBusy;
-                        serialColor = serialBusy;
+                        blinkColor = colorBusy;
+                        arduinoLeds = ledsBusyArduino;
                         break;
 
                     case ContactAvailability.Offline:
-                        newColor = colorOff;
-                        serialColor = serialOff;
+                        blinkColor = colorOff;
+                        arduinoLeds = ledsOffArduino;
                         break;
 
                     default:
                         break;
                 }
 
-                SetBlink1State(newColor);
-                serial.SetLEDs(serialColor);
+                SetBlink1State(blinkColor);
+                arduino.SetLEDs(arduinoLeds);
             }
         }
 
@@ -235,7 +240,7 @@ namespace LyncBlinkBridge
             {
                 if (color.Blue == 0 && color.Green == 0 && color.Red == 0)
                 {
-                    // wenn schwarz, dann modifizieren wir nicht das Bild. Eventuell müssen wir hier ein nicht verfügbar bild bauen.
+                    // if black , then we do not modify the image. We may need a picture unavailable build here.
                 }
                 else
                 {
@@ -309,10 +314,10 @@ namespace LyncBlinkBridge
                 blink1.Close();
             }
 
-            if (serial.Port.IsOpen)
+            if (arduino.Port.IsOpen)
             {
-                serial.SetLEDs(serialOff);
-                serial.Dispose();
+                arduino.SetLEDs(ledsOffArduino);
+                arduino.Dispose();
             }
                 
         }
@@ -332,28 +337,34 @@ namespace LyncBlinkBridge
             about.ShowDialog();
         }
 
+        private void settingsMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm settings = new SettingsForm();
+            settings.ShowDialog();
+        }
+
         private void OffMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorOff);
-            serial.SetLEDs(serialOff);
+            arduino.SetLEDs(ledsOffArduino);
         }
 
         private void AwayMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorAway);
-            serial.SetLEDs(serialAway);
+            arduino.SetLEDs(ledsAwayArduino);
         }
 
         private void BusyMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorBusy);
-            serial.SetLEDs(serialBusy);
+            arduino.SetLEDs(ledsBusyArduino);
         }
 
         private void AvailableMenuItem_Click(object sender, EventArgs e)
         {
             SetBlink1State(colorAvailable);
-            serial.SetLEDs(serialAvailable);
+            arduino.SetLEDs(ledsAvailableArduino);
         }
 
         // Watch for USB changes to detect blink(1) removal
