@@ -34,8 +34,10 @@ namespace LyncBlinkBridge
         private Rgb colorOff = new Rgb(0, 0, 0);
 
         private byte[] ledsAvailableArduino = { 255, 0, 0 };
+        private byte[] ledsAvailableIdleArduino = { 255, 50, 0 };
         private byte[] ledsBusyArduino = { 0, 0, 255 };
-        private byte[] ledsAwayArduino = { 0, 255, 0 };
+        private byte[] ledsBusyIdleArduino = { 0, 50, 255 };
+        private byte[] ledsAwayArduino = { 0, 50, 0 };
         private byte[] ledsOffArduino = { 0, 0, 0 };
 
 
@@ -177,29 +179,38 @@ namespace LyncBlinkBridge
                 ContactAvailability currentAvailability = (ContactAvailability)lyncClient.Self.Contact.GetContactInformation(ContactInformationType.Availability);
                 switch (currentAvailability)
                 {
-                    case ContactAvailability.Busy:
-                    case ContactAvailability.BusyIdle:
+                    case ContactAvailability.Busy:              // Busy
                         blinkColor = colorBusy;
                         arduinoLeds = ledsBusyArduino;
                         break;
 
-                    case ContactAvailability.Free:
-                    case ContactAvailability.FreeIdle:
+                    case ContactAvailability.BusyIdle:          // Busy and idle
+                        blinkColor = colorBusy;
+                        arduinoLeds = ledsBusyIdleArduino;
+                        break;
+
+                    case ContactAvailability.Free:              // Available
                         blinkColor = colorAvailable;
                         arduinoLeds = ledsAvailableArduino;
                         break;
 
-                    case ContactAvailability.Away:
+                    case ContactAvailability.FreeIdle:          // Available and idle
+                        blinkColor = colorAvailable;
+                        arduinoLeds = ledsAvailableIdleArduino;
+                        break;
+
+                    case ContactAvailability.Away:              // Inactive/away, off work, appear away
+                    case ContactAvailability.TemporarilyAway:   // Be right back
                         blinkColor = colorAway;
                         arduinoLeds = ledsAwayArduino;
                         break;
 
-                    case ContactAvailability.DoNotDisturb:
+                    case ContactAvailability.DoNotDisturb:      // Do not disturb
                         blinkColor = colorBusy;
                         arduinoLeds = ledsBusyArduino;
                         break;
 
-                    case ContactAvailability.Offline:
+                    case ContactAvailability.Offline:           // Offline
                         blinkColor = colorOff;
                         arduinoLeds = ledsOffArduino;
                         break;
@@ -210,6 +221,8 @@ namespace LyncBlinkBridge
 
                 SetBlink1State(blinkColor);
                 arduino.SetLEDs(arduinoLeds);
+
+                Debug.WriteLine(currentAvailability.ToString());
             }
         }
 
