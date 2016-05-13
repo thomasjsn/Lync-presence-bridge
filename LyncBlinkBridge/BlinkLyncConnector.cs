@@ -34,9 +34,9 @@ namespace LyncBlinkBridge
         private Rgb colorOff = new Rgb(0, 0, 0);
 
         private byte[] ledsAvailableArduino = { 255, 0, 0 };
-        private byte[] ledsAvailableIdleArduino = { 255, 50, 0 };
+        private byte[] ledsAvailableIdleArduino = { 255, 255, 0 };
         private byte[] ledsBusyArduino = { 0, 0, 255 };
-        private byte[] ledsBusyIdleArduino = { 0, 50, 255 };
+        private byte[] ledsBusyIdleArduino = { 0, 255, 255 };
         private byte[] ledsAwayArduino = { 0, 50, 0 };
         private byte[] ledsOffArduino = { 0, 0, 0 };
 
