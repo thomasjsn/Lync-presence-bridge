@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LyncBlinkBridge.Properties {
+namespace LyncPresenceBridge.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

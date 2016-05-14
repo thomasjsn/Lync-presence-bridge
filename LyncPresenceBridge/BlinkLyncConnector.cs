@@ -12,7 +12,7 @@ using System.Threading;
 using System.Drawing;
 using Uctrl.Arduino;
 
-namespace LyncBlinkBridge
+namespace LyncPresenceBridge
 {
     class BlinkLyncConnectorAppContext : ApplicationContext
     {

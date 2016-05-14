@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace LyncBlinkBridge
+namespace LyncPresenceBridge
 {
     public partial class AboutForm : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace LyncBlinkBridge
+﻿namespace LyncPresenceBridge
 {
     partial class SettingsForm
     {
