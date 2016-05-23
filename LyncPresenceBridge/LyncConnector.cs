@@ -14,7 +14,7 @@ using Uctrl.Arduino;
 
 namespace LyncPresenceBridge
 {
-    class BlinkLyncConnectorAppContext : ApplicationContext
+    class LyncConnectorAppContext : ApplicationContext
     {
         private NotifyIcon trayIcon;
         private ContextMenuStrip trayIconContextMenu;
@@ -41,7 +41,7 @@ namespace LyncPresenceBridge
         private byte[] ledsOffArduino = { 0, 0, 0 };
 
 
-        public BlinkLyncConnectorAppContext()
+        public LyncConnectorAppContext()
         {
             Application.ApplicationExit += new System.EventHandler(this.OnApplicationExit);
 
