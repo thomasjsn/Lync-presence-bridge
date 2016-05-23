@@ -13,7 +13,7 @@ namespace LyncPresenceBridge
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new BlinkLyncConnectorAppContext());
+            Application.Run(new LyncConnectorAppContext());
         }
     }
 }
