@@ -1,4 +1,4 @@
-# Lync-Blink-Bridge
+# Lync-presence-bridge
 Set blink(1) and Arduino light based on Skype for Business or Lync presence state.
 
 ## Project description
