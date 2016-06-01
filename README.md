@@ -1,8 +1,9 @@
 # Lync-presence-bridge
-Set blink(1) and Arduino light based on Skype for Business or Lync presence state.
+Set blink(1) and Arduino light based on Skype for Business or Lync presence state. See it in action [in this YouTube video video](https://www.youtube.com/watch?v=uuKfg7Y2FPA).
 
-## Project description
-Full project description and images coming soon...
+Build your own [Lync presence (busy) light](https://www.uctrl.net/p/172).
+
+![Lync presence (busy) light](https://cdn.uctrl.net/github/modules/172.jpeg)
 
 ## Requirements
 * Lync 2013 / Skype for Business 2016
