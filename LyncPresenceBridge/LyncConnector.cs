@@ -28,22 +28,32 @@ namespace LyncPresenceBridge
 
         private bool isLyncIntegratedMode = true;
 
-        private Rgb colorAvailable = new Rgb(0, 150, 17);
-        private Rgb colorBusy = new Rgb(150, 0, 0);
-        private Rgb colorAway = new Rgb(150, 150, 0);
-        private Rgb colorOff = new Rgb(0, 0, 0);
+        private static string[] colorAvailable = Properties.Settings.Default.ColorAvailable.Split(',');
+        private static string[] colorAvailableIdle = Properties.Settings.Default.ColorAvailableIdle.Split(',');
+        private static string[] colorBusy = Properties.Settings.Default.ColorBusy.Split(',');
+        private static string[] colorBusyIdle = Properties.Settings.Default.ColorBusyIdle.Split(',');
+        private static string[] colorAway = Properties.Settings.Default.ColorAway.Split(',');
+        private static string[] colorOff = Properties.Settings.Default.ColorOff.Split(',');
 
-        private byte[] ledsAvailableArduino = { 255, 0, 0 };
-        private byte[] ledsAvailableIdleArduino = { 255, 255, 0 };
-        private byte[] ledsBusyArduino = { 0, 0, 255 };
-        private byte[] ledsBusyIdleArduino = { 0, 255, 255 };
-        private byte[] ledsAwayArduino = { 0, 50, 0 };
-        private byte[] ledsOffArduino = { 0, 0, 0 };
+        private Rgb blinkColorAvailable = new Rgb(0, 150, 17);
+        private Rgb blinkColorAvailableIdle = new Rgb(0, 150, 17);
+        private Rgb blinkColorBusy = new Rgb(150, 0, 0);
+        private Rgb blinkColorBusyIdle = new Rgb(150, 0, 0);
+        private Rgb blinkColorAway = new Rgb(150, 150, 0);
+        private Rgb blinkColorOff = new Rgb(0, 0, 0);
+
+        private byte[] arduinoColorAvailable = Array.ConvertAll(colorAvailable, s => Convert.ToByte(s));
+        private byte[] arduinoColorAvailableIdle = Array.ConvertAll(colorAvailableIdle, s => Convert.ToByte(s));
+        private byte[] arduinoColorBusy = Array.ConvertAll(colorBusy, s => Convert.ToByte(s));
+        private byte[] arduinoColorBusyIdle = Array.ConvertAll(colorBusyIdle, s => Convert.ToByte(s));
+        private byte[] arduinoColorAway = Array.ConvertAll(colorAway, s => Convert.ToByte(s));
+        private byte[] arduinoColorOff = Array.ConvertAll(colorOff, s => Convert.ToByte(s));
 
 
         public LyncConnectorAppContext()
         {
-            Application.ApplicationExit += new System.EventHandler(this.OnApplicationExit);
+            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
 
             // Setup UI, NotifyIcon
             InitializeComponent();
@@ -53,10 +63,13 @@ namespace LyncPresenceBridge
             // Setup Blink
             InitializeBlink1();
 
-            // Setup port
-            if (! arduino.OpenPort("COM" + Properties.Settings.Default.ArduinoSerialPort.ToString()))
+            // Open Arduino serial port it's not 0
+            if (Properties.Settings.Default.ArduinoSerialPort > 0)
             {
-                trayIcon.ShowBalloonTip(1000, "Error", "Could not open and init serial port.", ToolTipIcon.Warning);
+                if (! arduino.OpenPort("COM" + Properties.Settings.Default.ArduinoSerialPort.ToString()))
+                {
+                    trayIcon.ShowBalloonTip(1000, "Error", "Could not open and init serial port.", ToolTipIcon.Warning);
+                }
             }
 
             // Setup Lync Client Connection
@@ -171,8 +184,8 @@ namespace LyncPresenceBridge
         /// </summary>
         void SetCurrentContactState()
         {
-            Rgb blinkColor = colorOff;
-            byte[] arduinoLeds = ledsOffArduino;
+            Rgb blinkColor = blinkColorOff;
+            byte[] arduinoLeds = arduinoColorOff;
 
             if (lyncClient.State == ClientState.SignedIn)
             {
@@ -180,39 +193,39 @@ namespace LyncPresenceBridge
                 switch (currentAvailability)
                 {
                     case ContactAvailability.Busy:              // Busy
-                        blinkColor = colorBusy;
-                        arduinoLeds = ledsBusyArduino;
+                        blinkColor = blinkColorBusy;
+                        arduinoLeds = arduinoColorBusy;
                         break;
 
                     case ContactAvailability.BusyIdle:          // Busy and idle
-                        blinkColor = colorBusy;
-                        arduinoLeds = ledsBusyIdleArduino;
+                        blinkColor = blinkColorBusyIdle;
+                        arduinoLeds = arduinoColorBusyIdle;
                         break;
 
                     case ContactAvailability.Free:              // Available
-                        blinkColor = colorAvailable;
-                        arduinoLeds = ledsAvailableArduino;
+                        blinkColor = blinkColorAvailable;
+                        arduinoLeds = arduinoColorAvailable;
                         break;
 
                     case ContactAvailability.FreeIdle:          // Available and idle
-                        blinkColor = colorAvailable;
-                        arduinoLeds = ledsAvailableIdleArduino;
+                        blinkColor = blinkColorAvailableIdle;
+                        arduinoLeds = arduinoColorAvailableIdle;
                         break;
 
                     case ContactAvailability.Away:              // Inactive/away, off work, appear away
                     case ContactAvailability.TemporarilyAway:   // Be right back
-                        blinkColor = colorAway;
-                        arduinoLeds = ledsAwayArduino;
+                        blinkColor = blinkColorAway;
+                        arduinoLeds = arduinoColorAway;
                         break;
 
                     case ContactAvailability.DoNotDisturb:      // Do not disturb
-                        blinkColor = colorBusy;
-                        arduinoLeds = ledsBusyArduino;
+                        blinkColor = blinkColorBusy;
+                        arduinoLeds = arduinoColorBusy;
                         break;
 
                     case ContactAvailability.Offline:           // Offline
-                        blinkColor = colorOff;
-                        arduinoLeds = ledsOffArduino;
+                        blinkColor = blinkColorOff;
+                        arduinoLeds = arduinoColorOff;
                         break;
 
                     default:
@@ -330,7 +343,7 @@ namespace LyncPresenceBridge
 
             if (arduino.Port.IsOpen)
             {
-                arduino.SetLEDs(ledsOffArduino);
+                arduino.SetLEDs(arduinoColorOff);
                 arduino.Dispose();
             }
                 
@@ -359,26 +372,26 @@ namespace LyncPresenceBridge
 
         private void OffMenuItem_Click(object sender, EventArgs e)
         {
-            SetBlink1State(colorOff);
-            arduino.SetLEDs(ledsOffArduino);
+            SetBlink1State(blinkColorOff);
+            arduino.SetLEDs(arduinoColorOff);
         }
 
         private void AwayMenuItem_Click(object sender, EventArgs e)
         {
-            SetBlink1State(colorAway);
-            arduino.SetLEDs(ledsAwayArduino);
+            SetBlink1State(blinkColorAway);
+            arduino.SetLEDs(arduinoColorAway);
         }
 
         private void BusyMenuItem_Click(object sender, EventArgs e)
         {
-            SetBlink1State(colorBusy);
-            arduino.SetLEDs(ledsBusyArduino);
+            SetBlink1State(blinkColorBusy);
+            arduino.SetLEDs(arduinoColorBusy);
         }
 
         private void AvailableMenuItem_Click(object sender, EventArgs e)
         {
-            SetBlink1State(colorAvailable);
-            arduino.SetLEDs(ledsAvailableArduino);
+            SetBlink1State(blinkColorAvailable);
+            arduino.SetLEDs(arduinoColorAvailable);
         }
 
         // Watch for USB changes to detect blink(1) removal

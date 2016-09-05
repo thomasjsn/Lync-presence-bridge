@@ -34,5 +34,77 @@ namespace LyncPresenceBridge.Properties {
                 this["ArduinoSerialPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255,0,0")]
+        public string ColorAvailable {
+            get {
+                return ((string)(this["ColorAvailable"]));
+            }
+            set {
+                this["ColorAvailable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255,255,0")]
+        public string ColorAvailableIdle {
+            get {
+                return ((string)(this["ColorAvailableIdle"]));
+            }
+            set {
+                this["ColorAvailableIdle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,255")]
+        public string ColorBusy {
+            get {
+                return ((string)(this["ColorBusy"]));
+            }
+            set {
+                this["ColorBusy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,255,255")]
+        public string ColorBusyIdle {
+            get {
+                return ((string)(this["ColorBusyIdle"]));
+            }
+            set {
+                this["ColorBusyIdle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,50,0")]
+        public string ColorAway {
+            get {
+                return ((string)(this["ColorAway"]));
+            }
+            set {
+                this["ColorAway"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,0")]
+        public string ColorOff {
+            get {
+                return ((string)(this["ColorOff"]));
+            }
+            set {
+                this["ColorOff"] = value;
+            }
+        }
     }
 }
