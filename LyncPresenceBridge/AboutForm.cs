@@ -22,7 +22,7 @@ namespace LyncPresenceBridge
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/uCtrlDev/Lync-presence-bridge");
+            System.Diagnostics.Process.Start("https://github.com/uCtrlHQ/Lync-presence-bridge");
         }
     }
 }
