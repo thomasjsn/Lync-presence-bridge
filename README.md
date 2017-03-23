@@ -3,7 +3,7 @@ Set blink(1) and Arduino light based on Skype for Business or Lync presence stat
 
 Build your own [Lync presence (busy) light](https://uctrl.io/p/172).
 
-![Lync presence (busy) light](https://uctrl.io/images/medium/683)
+![Lync presence (busy) light](http://i.imgur.com/PLz9gnhm.jpg)
 
 ## Requirements
 * Lync 2013 / Skype for Business 2016
