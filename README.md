@@ -10,7 +10,7 @@ Build your own [Lync presence (busy) light](https://uctrl.io/projects/tagged/lyn
 
 ## Development Requirements
 * blink(1) SDK: https://github.com/todbot/blink1/tree/master/windows/ManagedBlink1
-* Arduino LEDs: https://github.com/uCtrlHQ/Arduino-Lync-Presence-Light
+* Arduino LEDs: https://github.com/thomasjsn/Arduino-Lync-Presence-Light
 * Lync 2013 SDK: https://www.microsoft.com/en-us/download/details.aspx?id=36824
 
 ## Author
