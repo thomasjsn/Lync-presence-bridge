@@ -1,7 +1,7 @@
 # Lync-presence-bridge
 Set blink(1) and Arduino light based on Skype for Business or Lync presence state.
 
-Build your own [Lync presence (busy) light](https://www.uctrl.org/tags/lync/).
+Build your own [Lync presence (busy) light](https://uctrl.dev/tags/lync/).
 
 ![Lync presence (busy) light](image.jpg)
 
@@ -14,7 +14,7 @@ Build your own [Lync presence (busy) light](https://www.uctrl.org/tags/lync/).
 * Lync 2013 SDK: https://www.microsoft.com/en-us/download/details.aspx?id=36824
 
 ## Author
-[Thomas Jensen](https://www.uctrl.org/)
+[Thomas Jensen](https://uctrl.dev/)
 
 ## Credits / Attribution
 * Based on the works of [renenulsch](h ttps://github.com/renenulsch); [Lync-Blink-Bridge](https://github.com/renenulsch/Lync-Blink-Bridge)
