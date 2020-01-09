@@ -14,7 +14,7 @@ Build your own [Lync presence (busy) light](https://link.stdout.no/L).
 * Lync 2013 SDK: https://www.microsoft.com/en-us/download/details.aspx?id=36824
 
 ## Author
-[Thomas Jensen](https://www.stdout.no)
+[Thomas Jensen](https://thomas.stdout.no)
 
 ## Credits / Attribution
 * Based on the works of [renenulsch](h ttps://github.com/renenulsch); [Lync-Blink-Bridge](https://github.com/renenulsch/Lync-Blink-Bridge)
